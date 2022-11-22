@@ -6,7 +6,7 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git url:'https://github.com/Anmol-Seth1/hellowhale.git', branch:'master' , credentialsId: 'MyGitCredentials'
+        git url:'https://github.com/aseth19/hellowhale.git', branch:'master'
       }
     }
     
@@ -17,27 +17,6 @@ pipeline {
                 }
             }
         }
-    
-      stage("Push image") {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'Docker-Credentials') {
-                            myapp.push("latest")
-                            myapp.push("${env.BUILD_ID}")
-                    }
-                }
-            }
-        }
-
-    
-    stage('Deploy App') {
-      steps {
-        script {
-          kubernetesDeploy(configs: "hellowhale.yml", kubeconfigId: "mykubeconfig")
-        }
-      }
-    }
-
   }
 
 }
